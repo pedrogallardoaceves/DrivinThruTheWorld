@@ -22,20 +22,17 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "DieScene.h"
-#include "MenuScene.h"
-#include "GameScene1.h"
+#include "WinScene.h"
 #include <cocostudio/SimpleAudioEngine.h>
-#include "GameScene2.h"
-#include "GameScene3.h"
 #include "GameScene4.h"
 #include "Definitions.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 
-Scene* DieScene::createScene()
+Scene* WinScene::createScene()
 {
-    return DieScene::create();
+    return WinScene::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -46,7 +43,7 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
-bool DieScene::init()
+bool WinScene::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -58,38 +55,30 @@ bool DieScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/FartToot.mp3");
+    CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("music/Winner.mp3");
 
-    auto label = Label::createWithTTF("GAME OVER", "fonts/Marker Felt.ttf", 30);
-    label->setPosition(Vec2(origin.x + visibleSize.width / 2, (origin.y + visibleSize.height / 2) + 120));
-    label->setColor(Color3B::WHITE);
-    label->enableOutline(Color4B::WHITE, .5);
-    this->addChild(label, 1);
+    auto sprite = Sprite::create("WINNER.jpeg");
+    sprite->setAnchorPoint(Vec2::ZERO);
+    sprite->setPosition(Vec2::ZERO);
+    this->addChild(sprite, 0);
 
-    auto label2 = Label::createWithTTF("better luck the next time", "fonts/Marker Felt.ttf", 15);
-    label2->setPosition(Vec2(origin.x + visibleSize.width / 2, (origin.y + visibleSize.height / 2) - 120));
-    label2->setColor(Color3B::WHITE);
-    label2->enableOutline(Color4B::RED, .8);
-    this->addChild(label2, 1);
+    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/Winner.mp3");
 
-    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/FartToot.mp3");
-    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/FartToot.mp3");
-    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/FartToot.mp3");
 
     auto listenerKeyboard = EventListenerKeyboard().create();
-    listenerKeyboard->onKeyPressed = CC_CALLBACK_2(DieScene::onKeyPressed, this);
+    listenerKeyboard->onKeyPressed = CC_CALLBACK_2(WinScene::onKeyPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKeyboard, this);
 
     return true;
 }
-void DieScene::GoToGameScene()
+void WinScene::GoToGameScene()
 {
     auto scene = MenuScene::createScene();
-
+    CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
     Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
 }
 
-void DieScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event)
+void WinScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event)
 {
 
     if (key == EventKeyboard::KeyCode::KEY_SPACE) {

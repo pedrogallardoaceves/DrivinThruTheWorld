@@ -22,26 +22,29 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include"GameScene2.h"
-#include"GameScene3.h"
+#include "GameScene4.h"
+#include "GameScene3.h"
+#include "GameScene2.h"
 #include "GameScene1.h"
 #include <cocostudio/SimpleAudioEngine.h>
 #include "Car.h"
 #include "Obstacle.h"
 #include "DieScene.h"
 #include "Definitions.h"
+#include "GameScene2.h"
+#include "WinScene.h"
 
 USING_NS_CC;
 
-int points1= 0;
+int points3 = 0;
 
-Scene* GameScene2::createScene()
+Scene* GameScene4::createScene()
 {
 	auto scene = Scene::createWithPhysics();
 //cene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
 
-	auto layer = GameScene2::create();
+	auto layer = GameScene4::create();
 	layer->SetPhysicsWorld(scene->getPhysicsWorld());
 
 
@@ -58,7 +61,7 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
-bool GameScene2::init()
+bool GameScene4::init()
 {
 	//////////////////////////////
 	// 1. super init first
@@ -66,7 +69,6 @@ bool GameScene2::init()
 	{
 		return false;
 	}
-
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -76,25 +78,24 @@ bool GameScene2::init()
 	auto director = Director::getInstance();
 	auto tamanio = director->getWinSize();
 
-	auto Background = Sprite::create("CupHeadBackground.jpeg");
+	auto Background = Sprite::create("PacmanBackground.jpeg");
 	Background->setAnchorPoint(Vec2::ZERO);
 	Background->setPosition(Vec2::ZERO);
 	this->addChild(Background, 0);
-	auto moveBackground = MoveBy::create(15, Vec2(-970, 0));
+	auto moveBackground = MoveBy::create(24, Vec2(-970, 0));
 	Background->runAction(moveBackground);
 
-
-	this->schedule(CC_SCHEDULE_SELECTOR(GameScene2::SpawnObstacle), OBSTACLE_FREQUENCY * visibleSize.width);
+	this->schedule(CC_SCHEDULE_SELECTOR(GameScene4::SpawnObstacle), OBSTACLE_FREQUENCY * visibleSize.width);
 
 
 	car=new Car (this);
 
 	auto contactListener = EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = CC_CALLBACK_1(GameScene2::onContactBegin, this);
+	contactListener->onContactBegin = CC_CALLBACK_1(GameScene4::onContactBegin, this);
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	auto keyListener = EventListenerKeyboard::create();
-	keyListener->onKeyPressed=CC_CALLBACK_2(GameScene2::onKeyPressed,this);
+	keyListener->onKeyPressed=CC_CALLBACK_2(GameScene4::onKeyPressed,this);
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener, this);
 	
 
@@ -102,28 +103,27 @@ bool GameScene2::init()
 	return true;
 }
 
-void GameScene2::SpawnObstacle(float dt)
+void GameScene4::SpawnObstacle(float dt)
 {
 	obstacle.SpawnObstacle(this);
-	points1++;
-	st = std::to_string(points1);
+	points3++;
+	st = std::to_string(points3);
 	auto label = Label::createWithTTF(st , "fonts/Marker Felt.ttf", 30);
 	auto action = MoveBy::create(3, Vec2(-500, 0));
 	label->setPosition(410, 300);
-	label->setColor(Color3B::BLACK);
+	label->setColor(Color3B::WHITE);
 	label->enableOutline(Color4B::WHITE, .5);
 	this->addChild(label, 100);
 	label->runAction(action);
-	if (points1>9)
+	if (points3 ==20)
 	{
-		auto scene = GameScene3::createScene();
-
+		auto scene = WinScene::createScene();
+		CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
 	}
-
 }
 
-bool GameScene2::onContactBegin(cocos2d::PhysicsContact& contact)
+bool GameScene4::onContactBegin(cocos2d::PhysicsContact& contact)
 {
 	PhysicsBody *a = contact.getShapeA()->getBody();
 	PhysicsBody *b = contact.getShapeB()->getBody();
@@ -133,17 +133,18 @@ bool GameScene2::onContactBegin(cocos2d::PhysicsContact& contact)
 		auto scene = DieScene::createScene();
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
 		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
+
 	}
 	return true;
 }
-void GameScene2::onKeyPressed(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event)
+void GameScene4::onKeyPressed(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event)
 {
 	if (key == EventKeyboard::KeyCode::KEY_UP_ARROW)
 	{
 		car->Jump();
 	}
 }
-void GameScene2::onKeyReleased(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event)
+void GameScene4::onKeyReleased(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event)
 {
 	car->Stop();
 }

@@ -26,6 +26,7 @@
 #include "GameScene1.h"
 #include <cocostudio/SimpleAudioEngine.h>
 #include "Definitions.h"
+#include "DieScene.h"
 
 USING_NS_CC;
 

@@ -22,24 +22,45 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __DIE_SCENE_H__
-#define __DIE_SCENE_H__
+#ifndef _GAME_SCENE_4_H_
+#define _GAME_SCENE_4_H_
 
 #include "cocos2d.h"
+#include "Obstacle.h"
+#include "Car.h"
 
-class DieScene : public cocos2d::Scene
+class GameScene4 : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
 
     virtual bool init();
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(DieScene);
-private:
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event);
-    void GoToGameScene();
 
+
+    // implement the "static create()" method manually
+    CREATE_FUNC(GameScene4);
+
+private:
+    void SetPhysicsWorld(cocos2d::PhysicsWorld* world) { sceneWorld = world; };
+
+    void SpawnObstacle(float dt);
+
+    bool onContactBegin(cocos2d::PhysicsContact &contact);
+
+    cocos2d::PhysicsWorld* sceneWorld;
+
+    Obstacle obstacle;
+
+    Car *car;
+
+    void Jump();
+    void Stop();
+
+    void GameScene4::onKeyPressed(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event);
+    void GameScene4::onKeyReleased(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event);
+
+    int points3;
+    std::string st;
 };
 
-#endif // __DIE_SCENE_H__
+#endif // _GAME_SCENE_4_H_

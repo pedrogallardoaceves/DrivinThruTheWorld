@@ -67,6 +67,6 @@ void Obstacle::SpawnObstacle(cocos2d::Scene* scene)
 
 	scene->addChild(obstacle);
 
-	auto obstacleAction = MoveBy::create(0.009f * visibleSize.width, Point(-visibleSize.width * 1.5, 0));
+	auto obstacleAction = MoveBy::create(0.003f * visibleSize.width, Point(-visibleSize.width * 1.5, 0));
 	obstacle->runAction(obstacleAction);
 }

@@ -22,12 +22,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __DIE_SCENE_H__
-#define __DIE_SCENE_H__
+#ifndef __WIN_SCENE_H__
+#define __WIN_SCENE_H__
 
-#include "cocos2d.h"
+#include "cocos2d.h" 
 
-class DieScene : public cocos2d::Scene
+class WinScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
@@ -35,11 +35,11 @@ public:
     virtual bool init();
     
     // implement the "static create()" method manually
-    CREATE_FUNC(DieScene);
+    CREATE_FUNC(WinScene);
 private:
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode key, cocos2d::Event* event);
     void GoToGameScene();
 
 };
 
-#endif // __DIE_SCENE_H__
+#endif // __WIN_SCENE_H__

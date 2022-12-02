@@ -37,7 +37,7 @@ int points = 0;
 Scene* GameScene1::createScene()
 {
 	auto scene = Scene::createWithPhysics();
-	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+//cene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
 
 	auto layer = GameScene1::create();
@@ -79,7 +79,7 @@ bool GameScene1::init()
 	Background->setAnchorPoint(Vec2::ZERO);
 	Background->setPosition(Vec2::ZERO);
 	this->addChild(Background, 0);
-	auto moveBackground = MoveBy::create(30, Vec2(-970, 0));
+	auto moveBackground = MoveBy::create(11, Vec2(-970, 0));
 	Background->runAction(moveBackground);
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("music/GameScene_1.mp3");
@@ -128,7 +128,7 @@ bool GameScene1::onContactBegin(cocos2d::PhysicsContact& contact)
 	PhysicsBody *a = contact.getShapeA()->getBody();
 	PhysicsBody *b = contact.getShapeB()->getBody();
 
-	if ((CAR_COLLITION_BITMASK == a->getCollisionBitmask() || OBSTACLE_COLLITION_BITMASK == b->getCollisionBitmask())|| (CAR_COLLITION_BITMASK == b->getCollisionBitmask() || OBSTACLE_COLLITION_BITMASK == a->getCollisionBitmask()))
+	if ((CAR_COLLITION_BITMASK == a->getCollisionBitmask() && OBSTACLE_COLLITION_BITMASK == b->getCollisionBitmask())|| (CAR_COLLITION_BITMASK == b->getCollisionBitmask() && OBSTACLE_COLLITION_BITMASK == a->getCollisionBitmask()))
 	{
 		auto scene = DieScene::createScene();
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();

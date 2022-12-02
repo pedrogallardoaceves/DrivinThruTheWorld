@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 #include "GameScene3.h"
+#include "GameScene4.h"
 #include "GameScene2.h"
 #include "GameScene1.h"
 #include <cocostudio/SimpleAudioEngine.h>
@@ -39,7 +40,7 @@ int points2= 0;
 Scene* GameScene3::createScene()
 {
 	auto scene = Scene::createWithPhysics();
-	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+//cene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
 
 	auto layer = GameScene3::create();
@@ -80,7 +81,7 @@ bool GameScene3::init()
 	Background->setAnchorPoint(Vec2::ZERO);
 	Background->setPosition(Vec2::ZERO);
 	this->addChild(Background, 0);
-	auto moveBackground = MoveBy::create(30, Vec2(-970, 0));
+	auto moveBackground = MoveBy::create(20, Vec2(-970, 0));
 	Background->runAction(moveBackground);
 
 	this->schedule(CC_SCHEDULE_SELECTOR(GameScene3::SpawnObstacle), OBSTACLE_FREQUENCY * visibleSize.width);
@@ -113,7 +114,12 @@ void GameScene3::SpawnObstacle(float dt)
 	label->enableOutline(Color4B::WHITE, .5);
 	this->addChild(label, 100);
 	label->runAction(action);
+	if (points2 ==15)
+	{
+		auto scene = GameScene4::createScene();
 
+		Director::getInstance()->replaceScene(TransitionFade::create(TRANSITION_TIME, scene));
+	}
 }
 
 bool GameScene3::onContactBegin(cocos2d::PhysicsContact& contact)
@@ -121,7 +127,7 @@ bool GameScene3::onContactBegin(cocos2d::PhysicsContact& contact)
 	PhysicsBody *a = contact.getShapeA()->getBody();
 	PhysicsBody *b = contact.getShapeB()->getBody();
 
-	if ((CAR_COLLITION_BITMASK == a->getCollisionBitmask() || OBSTACLE_COLLITION_BITMASK == b->getCollisionBitmask())|| (CAR_COLLITION_BITMASK == b->getCollisionBitmask() || OBSTACLE_COLLITION_BITMASK == a->getCollisionBitmask()))
+	if ((CAR_COLLITION_BITMASK == a->getCollisionBitmask() && OBSTACLE_COLLITION_BITMASK == b->getCollisionBitmask())|| (CAR_COLLITION_BITMASK == b->getCollisionBitmask() && OBSTACLE_COLLITION_BITMASK == a->getCollisionBitmask()))
 	{
 		auto scene = DieScene::createScene();
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopAllEffects();
